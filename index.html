@@ -4,8 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>趣味のなる木</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <style>
+        :root {
+            --bg-color: #f7f9f6;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --primary: #4caf50;
+            --border-color: #e0e0e0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px 10px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header { text-align: center; }
+        header h1 { font-size: 20px; color: #388e3c; margin-bottom: 4px; }
+        header p { font-size: 12px; color: #666; }
+
+        .tree-section {
+            background: #e3f2fd;
+            border-radius: 20px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 20px;
+        }
+        .tree-visual {
+            position: relative;
+            width: 100px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .tree-leaves {
+            width: 90px; height: 90px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            position: absolute; bottom: 30px;
+            z-index: 1;
+        }
+        .tree-trunk {
+            width: 20px; height: 40px;
+            background-color: #795548;
+            border-radius: 4px 4px 0 0;
+        }
+        .fruits-container {
+            position: absolute; bottom: 30px;
+            width: 90px; height: 90px; z-index: 2;
+        }
+        .fruit {
+            position: absolute; font-size: 16px;
+            animation: popIn 0.3s forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        .chopping { animation: shake 0.1s infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(3px); }
+        }
+
+        .status-card { background: #f1f8e9; padding: 16px; text-align: center; border-radius: 16px; }
+        .status-label { font-size: 12px; font-weight: bold; color: #388e3c; margin-bottom: 4px; }
+        .status-amount { font-size: 28px; font-weight: bold; }
+        .status-amount.minus { color: #d32f2f; }
+        .status-total { font-size: 12px; color: #666; margin-top: 4px; }
+
+        .section-title { font-size: 14px; font-weight: bold; color: #666; margin-bottom: 8px; }
+        .amount-grid, .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px; }
+        .btn-amount, .btn-category {
+            padding: 12px 0; border: 1px solid var(--border-color);
+            border-radius: 12px; background: #fff; cursor: pointer;
+            font-size: 14px; font-weight: bold;
+        }
+        .btn-category { font-size: 20px; }
+        .btn-category.selected { border-color: var(--primary); background: #e8f5e9; }
+        .input-display { text-align: right; font-weight: bold; font-size: 14px; margin-bottom: 16px; }
+
+        .btn-submit {
+            background: var(--primary); color: white; border: none;
+            padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; font-size: 16px;
+        }
+        .btn-submit:disabled { background: #ccc; }
+
+        .action-section { border-top: 1px dashed #ccc; padding-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+        .flex-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-secondary { padding: 10px; border: 1px solid #ccc; border-radius: 8px; background: #fff; font-weight: bold; cursor: pointer; }
+        .btn-danger { color: #d32f2f; border-color: #ffcdd2; }
+
+        .budget-setup-box { display: none; background: #efebe9; padding: 12px; border-radius: 12px; flex-direction: column; gap: 8px; }
+        .budget-setup-box.open { display: flex; }
+        .budget-desc { font-weight: bold; font-size: 12px; color: #5d4037; }
+        .input-group { display: flex; gap: 8px; }
+        .input-group input { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; }
+        .btn-save-budget { background: #795548; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; }
+        .budget-note { font-size: 11px; color: #666; }
+    </style>
 </head>
 <body>
 
@@ -15,25 +131,20 @@
         <p>罪悪感ゼロ！今月も楽しく使い切ろう</p>
     </header>
 
-    <!-- 木のビジュアルエリア -->
     <div class="tree-section">
         <div class="tree-visual" id="treeVisual">
             <div class="tree-leaves"></div>
-            <div class="fruits-container" id="fruitsContainer">
-                <!-- JavaScriptでここに実を生成 -->
-            </div>
+            <div class="fruits-container" id="fruitsContainer"></div>
             <div class="tree-trunk"></div>
         </div>
     </div>
 
-    <!-- お財布ステータス -->
     <div class="status-card">
         <div class="status-label">自由に使える残り予算</div>
         <div class="status-amount" id="remainingBudgetDisplay">¥0</div>
         <div class="status-total" id="totalBudgetDisplay">（今月の予算：¥0）</div>
     </div>
 
-    <!-- 支出入力 -->
     <div class="input-section">
         <div class="section-title">いくら使った？</div>
         <div class="amount-grid">
@@ -55,14 +166,12 @@
         <button class="btn-submit" id="submitBtn" onclick="submitExpense()" disabled>記録する！</button>
     </div>
 
-    <!-- 各種アクション -->
     <div class="action-section">
         <div class="flex-actions">
             <button class="btn-secondary" onclick="toggleBudgetSetup()">📅 給料日が来た</button>
             <button class="btn-secondary btn-danger" onclick="chopTree()">🪓 木を切り倒す</button>
         </div>
 
-        <!-- 給料日予算入力 -->
         <div class="budget-setup-box" id="budgetSetupBox">
             <div class="budget-desc">次の給料日までの「自由枠予算」を設定：</div>
             <div class="input-group">
@@ -74,5 +183,105 @@
     </div>
 </div>
 
+<script>
+    let appData = {
+        budget: 0,
+        spent: 0,
+        savings: 0 
+    };
+
+    let currentInputAmount = 0;
+    let currentSelectedCategory = '';
+
+    window.onload = function() {
+        const savedData = localStorage.getItem('hobbyTreeData');
+        if (savedData) appData = JSON.parse(savedData);
+        updateUI();
+    };
+
+    function updateUI() {
+        const remaining = appData.budget - appData.spent;
+        
+        const remainingDisplay = document.getElementById('remainingBudgetDisplay');
+        remainingDisplay.innerText = `¥${remaining.toLocaleString()}`;
+        remainingDisplay.className = `status-amount ${remaining < 0 ? 'minus' : ''}`;
+        document.getElementById('totalBudgetDisplay').innerText = `（今月の予算：¥${appData.budget.toLocaleString()}）`;
+        document.getElementById('inputAmountDisplay').innerText = `入力中: ¥${currentInputAmount.toLocaleString()}`;
+
+        const fruitsContainer = document.getElementById('fruitsContainer');
+        fruitsContainer.innerHTML = '';
+        let fruitCount = Math.floor(Math.max(0, appData.savings) / 1000);
+        if (fruitCount > 30) fruitCount = 30; 
+
+        for (let i = 0; i < fruitCount; i++) {
+            const fruitEl = document.createElement('span');
+            fruitEl.className = 'fruit';
+            fruitEl.innerText = '🍎';
+            fruitEl.style.left = `${Math.random() * 70 + 5}%`;
+            fruitEl.style.top = `${Math.random() * 70 + 5}%`;
+            fruitsContainer.appendChild(fruitEl);
+        }
+
+        document.getElementById('submitBtn').disabled = !(currentInputAmount > 0 && currentSelectedCategory);
+    }
+
+    function selectAmount(amount) { currentInputAmount += amount; updateUI(); }
+    function selectCategory(category, element) {
+        currentSelectedCategory = category;
+        document.querySelectorAll('.btn-category').forEach(btn => btn.classList.remove('selected'));
+        element.classList.add('selected');
+        updateUI();
+    }
+
+    function submitExpense() {
+        appData.spent += currentInputAmount;
+        localStorage.setItem('hobbyTreeData', JSON.stringify(appData));
+        
+        currentInputAmount = 0;
+        currentSelectedCategory = '';
+        document.querySelectorAll('.btn-category').forEach(btn => btn.classList.remove('selected'));
+        
+        updateUI();
+    }
+
+    function toggleBudgetSetup() {
+        document.getElementById('budgetSetupBox').classList.toggle('open');
+    }
+
+    function processSalaryDay() {
+        const newBudget = parseInt(document.getElementById('newBudgetInput').value);
+        if (isNaN(newBudget) || newBudget < 0) return alert('正しい金額を入れてください');
+
+        const remaining = appData.budget - appData.spent;
+        appData.savings += remaining; 
+        if (appData.savings < 0) appData.savings = 0;
+
+        appData.budget = newBudget;
+        appData.spent = 0;
+        
+        localStorage.setItem('hobbyTreeData', JSON.stringify(appData));
+        updateUI();
+        document.getElementById('newBudgetInput').value = '';
+        toggleBudgetSetup();
+        
+        alert(remaining >= 0 ? `余った ¥${remaining.toLocaleString()} が木の実になりました！🍎` : `予算オーバー分が貯金から引かれました🪓`);
+    }
+
+    function chopTree() {
+        if (appData.savings <= 0) return alert('まだ実がなっていません！');
+        if (!confirm('本当に木を切り倒しますか？')) return;
+
+        const treeVisual = document.getElementById('treeVisual');
+        treeVisual.classList.add('chopping');
+
+        setTimeout(() => {
+            treeVisual.classList.remove('chopping');
+            alert(`🪓 ドンッ！！！\n\n💰 貯金総額: ¥${appData.savings.toLocaleString()}\n\n好きに使いましょう！✨`);
+            appData.savings = 0;
+            localStorage.setItem('hobbyTreeData', JSON.stringify(appData));
+            updateUI();
+        }, 1000);
+    }
+</script>
 </body>
 </html>
