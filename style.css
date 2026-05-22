@@ -1,0 +1,212 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fff7ec;
+  color: #3d3028;
+}
+
+.app-header {
+  padding: 28px 20px;
+  text-align: center;
+  background: #ffcf8a;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.app-header p {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+.container {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  gap: 18px;
+}
+
+.card {
+  background: #fffdf8;
+  border: 2px solid #f0d6b6;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(96, 65, 35, 0.08);
+}
+
+.main-card {
+  display: grid;
+  gap: 20px;
+}
+
+.avatar-box {
+  text-align: center;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: #ffe8b8;
+  display: grid;
+  place-items: center;
+  font-size: 56px;
+  transition: transform 0.2s ease;
+}
+
+.avatar.fun {
+  transform: rotate(-4deg) scale(1.05);
+}
+
+.avatar.warning {
+  transform: rotate(5deg) scale(1.08);
+}
+
+.avatar.tired {
+  transform: rotate(0deg) scale(0.95);
+  filter: grayscale(0.2);
+}
+
+.money-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.money-grid div {
+  background: #fff4df;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+}
+
+.money-grid span {
+  display: block;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.money-grid strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 22px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+label {
+  display: block;
+  margin: 12px 0;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+input,
+select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border: 1px solid #d9b98f;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #fffefb;
+}
+
+button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 14px;
+  background: #f39c38;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button.danger {
+  background: #b85c50;
+}
+
+.progress-wrap {
+  width: 100%;
+  height: 24px;
+  background: #f5e1c8;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #f39c38;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.result-text {
+  font-weight: 700;
+}
+
+.small-text {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.friend-list {
+  display: grid;
+  gap: 12px;
+}
+
+.friend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff4df;
+  padding: 12px;
+  border-radius: 16px;
+}
+
+.friend-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffe8b8;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+}
+
+#historyList {
+  padding-left: 20px;
+}
+
+#historyList li {
+  margin: 6px 0;
+}
+
+@media (max-width: 640px) {
+  .money-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-header h1 {
+    font-size: 24px;
+  }
+}
