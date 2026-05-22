@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ごほうび財布</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>ごほうび財布</h1>
+    <p>趣味を楽しみながら、ごほうびも育てるアプリ</p>
+  </header>
+
+  <main class="container">
+    <section class="card main-card">
+      <div class="avatar-box">
+        <div id="avatar" class="avatar">🦊</div>
+        <p id="avatarMessage">ゆっくり過ごしているようです</p>
+      </div>
+
+      <div class="money-grid">
+        <div>
+          <span>今月の趣味予算</span>
+          <strong id="budgetText">0円</strong>
+        </div>
+        <div>
+          <span>使った金額</span>
+          <strong id="spentText">0円</strong>
+        </div>
+        <div>
+          <span>残り</span>
+          <strong id="remainText">0円</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>基本設定</h2>
+
+      <label>
+        今月の趣味予算
+        <input id="budgetInput" type="number" placeholder="例：10000" />
+      </label>
+
+      <label>
+        ごほうび名
+        <input id="goalNameInput" type="text" placeholder="例：焼肉" />
+      </label>
+
+      <label>
+        ごほうび目標金額
+        <input id="goalTargetInput" type="number" placeholder="例：15000" />
+      </label>
+
+      <button id="saveSettingBtn">設定を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>趣味に使ったお金を記録</h2>
+
+      <label>
+        金額
+        <input id="spentInput" type="number" placeholder="例：1200" />
+      </label>
+
+      <label>
+        カテゴリ
+        <select id="categoryInput">
+          <option value="グッズ">グッズ</option>
+          <option value="サブスク">サブスク</option>
+          <option value="ゲーム">ゲーム</option>
+          <option value="映画">映画</option>
+          <option value="カフェ">カフェ</option>
+          <option value="その他">その他</option>
+        </select>
+      </label>
+
+      <button id="addSpentBtn">記録する</button>
+    </section>
+
+    <section class="card">
+      <h2 id="goalTitle">ごほうび貯金</h2>
+
+      <div class="progress-wrap">
+        <div id="goalProgress" class="progress-bar"></div>
+      </div>
+
+      <p>
+        <strong id="goalSavedText">0円</strong>
+        /
+        <span id="goalTargetText">0円</span>
+      </p>
+
+      <button id="monthEndBtn">月末処理をする</button>
+      <p id="monthEndResult" class="result-text"></p>
+    </section>
+
+    <section class="card">
+      <h2>みんなの様子</h2>
+      <p class="small-text">※金額は見せず、アバターの状態だけ共有する想定です。</p>
+
+      <div class="friend-list">
+        <div class="friend">
+          <span class="friend-avatar">🐱</span>
+          <p>趣味を満喫しているようです</p>
+        </div>
+        <div class="friend">
+          <span class="friend-avatar">🐻</span>
+          <p>ゆっくり過ごしているようです</p>
+        </div>
+        <div class="friend">
+          <span class="friend-avatar">🐧</span>
+          <p>今月は全力で楽しんだようです</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>今月の記録</h2>
+      <ul id="historyList"></ul>
+      <button id="resetBtn" class="danger">データをリセット</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
